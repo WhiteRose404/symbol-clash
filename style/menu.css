@@ -1,0 +1,258 @@
+#main-box{
+    gap: 1rem;
+}
+#options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+}
+#options > button {
+    width: 100%;
+    padding: 0.7rem;
+    border-radius: 5px;
+    border: 1px solid var(--main-color);
+    outline: none;
+    background-color: var(--main-color);
+    color: var(--main-bg);
+    font-weight: bold;
+    cursor: pointer;
+}
+#options > button:hover {
+    background-color: var(--main-bg);
+    color: var(--main-color);
+    opacity: 1;
+}
+#options > button:active {
+    background-color: var(--main-bg);
+    color: var(--main-color);
+    opacity: 1;
+}
+#options > button:disabled {
+    background-color: var(--main-bg);
+    color: var(--main-color);
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+#options > button:disabled:hover {
+    background-color: var(--main-bg);
+    color: var(--main-color);
+    opacity: 1;
+}
+#options > button:disabled:active {
+    background-color: var(--main-bg);
+    color: var(--main-color);
+    opacity: 1;
+}
+
+
+#profile, #profile > #profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+}
+#profile > #profile-info {
+    flex-direction: row;
+}
+
+.custom-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+    opacity: 0.9;
+}
+.custom-options > input {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+}
+.custom-options > input:focus {
+    border: 1px solid var(--main-color-dark);
+}
+.custom-options > input::placeholder {
+    color: var(--main-color);
+}
+.custom-options > input:focus::placeholder {
+    color: var(--main-color-dark);
+}
+.custom-options > button {
+    width: 100%;
+    padding: 0.7rem 3rem;
+    border-radius: 5px;
+    border: 1px solid var(--main-color);
+    outline: none;
+    background-color: var(--main-color);
+    color: var(--main-bg);
+    font-weight: bold;
+    cursor: pointer;
+}
+.custom-options > button~button {
+    background-color: var(--main-bg);
+    color: var(--main-color);
+}
+.custom-options > button:hover {
+    background-color: var(--main-bg);
+    color: var(--main-color);
+    opacity: 1;
+}
+.custom-options > button:active {
+    background-color: var(--main-bg);
+    color: var(--main-color);
+    opacity: 1;
+}
+.custom-options > button:disabled {
+    background-color: var(--main-bg);
+    color: var(--main-color);
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.custom-options > button:disabled:hover {
+    background-color: var(--main-bg);
+    color: var(--main-color);
+    opacity: 1;
+}
+.custom-options > button:disabled:active {
+    background-color: var(--main-bg);
+    color: var(--main-color);
+    opacity: 1;
+}
+.custom-options > table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+.custom-options > table > thead > tr > th {
+    padding: 0.5rem;
+    border: 1px solid var(--main-color);
+    background-color: var(--main-color);
+    color: var(--main-bg);
+    font-weight: bold;
+}
+.custom-options > table > tbody > tr > td {
+    padding: 0.5rem;
+    border: 1px solid var(--main-color);
+    background-color: var(--main-bg);
+    color: var(--main-color);
+    font-weight: bold;
+}
+.custom-options > table > tbody.loading > tr > td {
+    animation: row-loading 1s infinite;
+}
+.custom-options > table > tbody > tr > td > button {
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid var(--main-color);
+    outline: none;
+    background-color: var(--main-color);
+    color: var(--main-bg);
+    font-weight: bold;
+    cursor: pointer;
+}
+.custom-options > table > tbody > tr > td > button:hover,
+.custom-options > table > tbody > tr > td > button:active,
+.custom-options > table > tbody > tr > td > button:disabled{
+    background-color: var(--main-bg);
+    color: var(--main-color);
+    opacity: 1;
+}
+.custom-options > table > tbody > tr > td > button:disabled {
+    cursor: not-allowed;
+}
+
+
+
+
+#general-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+    opacity: 0.9;
+}
+#general-info > .info,
+#general-info > .buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+    opacity: 0.9;
+}
+#general-info > .info > .message{
+    font: 1.2rem 'Roboto', sans-serif;
+    font-weight: bold;
+    color: var(--main-color);
+}
+#general-info > .buttons {
+    flex-direction: row;
+}
+#general-info > .buttons > button {
+    padding: 0.7rem;
+    border-radius: 5px;
+    border: 1px solid var(--main-color);
+    outline: none;
+    background-color: var(--main-color);
+    color: var(--main-bg);
+    font-weight: bold;
+    cursor: pointer;
+}
+#general-info > .buttons > #back ,
+#general-info > .buttons > #logout {
+    background-color: var(--main-bg);
+    color: var(--main-color);
+}
+#general-info > .buttons > button:hover {
+    background-color: var(--main-bg);
+    color: var(--main-color);
+    opacity: 1;
+}
+
+
+
+
+
+
+
+
+@keyframes row-loading {
+    0% {
+        background-color: var(--main-bg);
+        color: var(--main-color);
+        opacity: 0.5;
+    }
+    50% {
+        background-color: var(--main-color);
+        color: var(--main-bg);
+        opacity: 0.4;
+    }
+    100% {
+        background-color: var(--main-bg);
+        color: var(--main-color);
+        opacity: 0.5;
+    }
+}

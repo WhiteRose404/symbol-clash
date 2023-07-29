@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="./media/pieces/chessboard.png">
+    <title>Game</title>
+    <link rel="stylesheet" href="style/rest.css">
+    <link rel="stylesheet" href="style/index.css">
+    <link rel="stylesheet" href="style/board.css">
+
+</head>
+<body>
+    <main id="main-box">
+        <section id="title">
+            <h1>Game</h1>            
+        </section>
+        <section id="body">
+            <div id="game-board">
+                <!-- chess board -->
+                <div class="game-column" data-column="0">
+                    <div class="cell" data-row="0"></div>
+                    <div class="cell" data-row="1"></div>
+                    <div class="cell" data-row="2"></div>
+                    <div class="cell" data-row="3"></div>
+                    <div class="cell" data-row="4"></div>
+                    <div class="cell" data-row="5"></div>
+                    <div class="cell" data-row="6"></div>
+                    <div class="cell" data-row="7"></div>
+                </div>
+                <div class="game-column" data-column="1">
+                    <div class="cell" data-row="0"></div>
+                    <div class="cell" data-row="1"></div>
+                    <div class="cell" data-row="2"></div>
+                    <div class="cell" data-row="3"></div>
+                    <div class="cell" data-row="4"></div>
+                    <div class="cell" data-row="5"></div>
+                    <div class="cell" data-row="6"></div>
+                    <div class="cell" data-row="7"></div>
+                </div>
+                <div class="game-column" data-column="2">
+                    <div class="cell" data-row="0"></div>
+                    <div class="cell" data-row="1"></div>
+                    <div class="cell" data-row="2"></div>
+                    <div class="cell" data-row="3"></div>
+                    <div class="cell" data-row="4"></div>
+                    <div class="cell" data-row="5"></div>
+                    <div class="cell" data-row="6"></div>
+                    <div class="cell" data-row="7"></div>
+                </div>
+                <div class="game-column" data-column="3">
+                    <div class="cell" data-row="0"></div>
+                    <div class="cell" data-row="1"></div>
+                    <div class="cell" data-row="2"></div>
+                    <div class="cell" data-row="3"></div>
+                    <div class="cell" data-row="4"></div>
+                    <div class="cell" data-row="5"></div>
+                    <div class="cell" data-row="6"></div>
+                    <div class="cell" data-row="7"></div>
+                </div>
+                <div class="game-column" data-column="4">
+                    <div class="cell" data-row="0"></div>
+                    <div class="cell" data-row="1"></div>
+                    <div class="cell" data-row="2"></div>
+                    <div class="cell" data-row="3"></div>
+                    <div class="cell" data-row="4"></div>
+                    <div class="cell" data-row="5"></div>
+                    <div class="cell" data-row="6"></div>
+                    <div class="cell" data-row="7"></div>
+                </div>
+                <div class="game-column" data-column="5">
+                    <div class="cell" data-row="0"></div>
+                    <div class="cell" data-row="1"></div>
+                    <div class="cell" data-row="2"></div>
+                    <div class="cell" data-row="3"></div>
+                    <div class="cell" data-row="4"></div>
+                    <div class="cell" data-row="5"></div>
+                    <div class="cell" data-row="6"></div>
+                    <div class="cell" data-row="7"></div>
+                </div>
+                <div class="game-column" data-column="6">
+                    <div class="cell" data-row="0"></div>
+                    <div class="cell" data-row="1"></div>
+                    <div class="cell" data-row="2"></div>
+                    <div class="cell" data-row="3"></div>
+                    <div class="cell" data-row="4"></div>
+                    <div class="cell" data-row="5"></div>
+                    <div class="cell" data-row="6"></div>
+                    <div class="cell" data-row="7"></div>
+                </div>
+                <div class="game-column" data-column="7">
+                    <div class="cell" data-row="0"></div>
+                    <div class="cell" data-row="1"></div>
+                    <div class="cell" data-row="2"></div>
+                    <div class="cell" data-row="3"></div>
+                    <div class="cell" data-row="4"></div>
+                    <div class="cell" data-row="5"></div>
+                    <div class="cell" data-row="6"></div>
+                    <div class="cell" data-row="7"></div>
+                </div>
+                <!-- chess pieces -->
+                
+            </div>
+        </section>
+        <section id="error-box">Illegal Move</section>
+        <section id="info-box">
+            <div id="time">
+                <div>
+                    <span class="player-name">White</span>
+                    <span class="player-time">00:00:00</span>
+                </div>
+                <div>
+                    <span class="player-name">Black</span>
+                    <span class="player-time">00:00:00</span>
+                </div>
+            </div>
+            <div id="general"></div>
+        </section>
+        <section id="button-box">
+            <button type="button" id="resign">Resign</button>
+            <button type="button" id="back">Back</button>
+        </section>
+    </main>
+    <!-- modules -->
+    <script src="src/lib/board/index.mjs" type="module" defer></script>
+    <script src="src/lib/pieces/index.mjs" type="module" defer></script>
+    <script src="src/lib/pieces/ghost.mjs" type="module" defer></script>
+    <script src="src/lib/pieces/bishop.mjs" type="module" defer></script>
+    <script src="src/lib/pieces/king.mjs" type="module" defer></script>
+    <script src="src/lib/pieces/knight.mjs" type="module" defer></script>
+    <script src="src/lib/pieces/pawn.mjs" type="module" defer></script>
+    <script src="src/lib/pieces/queen.mjs" type="module" defer></script>
+    <script src="src/lib/pieces/rock.mjs" type="module" defer></script>
+    <script src="src/lib/players/index.mjs" type="module" defer></script>
+    <script src="src/lib/players/local/white.mjs" type="module" defer></script>
+    <script src="src/lib/players/local/black.mjs" type="module" defer></script>
+    <script src="src/lib/utils/index.mjs" type="module" defer></script>
+
+
+    <script src="src/board/index.mjs" type="module" defer></script>
+</body>
+</html>

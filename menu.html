@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="./media/pieces/chessboard.png">
+    <title>Game</title>
+    <link rel="stylesheet" href="style/rest.css">
+    <link rel="stylesheet" href="style/index.css">
+    <link rel="stylesheet" href="style/menu.css">
+
+</head>
+<body>
+    <main id="main-box">
+        <section id="title">
+            <h1>Menu</h1>            
+        </section>
+        <section id="body">
+            <div id="options" class="">
+                <button id="join-game-button" disabled>Join Game</button>
+                <button id="new-game-button">New Game</button>
+                <button id="leaderboard-button" disabled>Leaderboard</button>
+                <button id="profile-button" disabled>Profile</button>
+            </div>
+            <div id="join-game-form" class="custom-options hidden">
+                <input type="text" id="game-id" placeholder="game id">
+                <button id="join">Join</button>
+            </div>
+            <div id="new-game-form" class="custom-options hidden">
+                <button id="create" disabled>Create</button>
+                <button id="vs-computer" disabled>Engine</button>
+                <button id="vs-random" disabled>Random</button>
+                <button id="vs-local">Friend</button>
+            </div>
+            <div id="leaderboard-table" class="custom-options hidden">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Player</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body" class="loading">
+                        <tr>
+                            <td>xxxxx</td>
+                            <td>xxxxx</td>
+                            <td>xxxxx</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="profile" class="custom-options hidden">
+                <div id="profile-info">
+                    <div id="profile-image">img</div>
+                    <div id="profile-name">High</div>
+                    <div id="profile-score">1500</div>
+                </div>
+                <div id="profile-games">
+                    <div id="profile-games-title">Games</div>
+                    <div id="profile-games-body">
+                        <div class="profile-game">
+                            <div class="profile-game-id">xxxxx</div>
+                            <div class="profile-game-score">xxxxx</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="error-box"></section>
+        <section id="general-info">
+            <div class="info">
+                <span class="message"></span>
+                <span class="warning"></span>
+                <span class="error"></span>
+            </div>
+            <div class="buttons">
+                <button id="back-button" class="hidden">Back</button>
+                <button id="logout-button">Logout</button>
+            </div>
+        </section>
+    </main>
+    <script src="src/menu/index.js" defer></script>
+</body>
+</html>

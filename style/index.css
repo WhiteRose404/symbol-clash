@@ -1,0 +1,71 @@
+body{
+    background-color: var(--main-bg);
+    color: var(--main-color);
+    min-width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+h1{
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+
+
+
+
+#main-box{
+    border-radius: 5px;
+    min-width: var(--xs-screen);
+    min-height: var(--sm-screen);
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+@media screen and (width > 768px){
+    #main-box{
+        min-width: var(--md-screen);
+        max-height: var(--md-screen);
+    }
+}
+
+#main-title{
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 2rem;
+    margin-bottom: 5rem;
+}
+
+.hidden{
+    display: none !important;
+}
+
+:root{
+    --main-bg: #f1f1f1;
+    --main-bg-secondary: #acaba7bb;
+    --main-color: #333;
+    --main-color-opaque: #30303077;
+    --main-board-bg: #ddd;
+    /* --main-bg-dark: #0c0c0c; */
+    /* --main-color-dark: #f1f1f1; */
+
+    --xs-screen: 320px;
+    --sm-screen: 480px;
+    --md-screen: 768px;
+    --lg-screen: 1024px;
+
+    --piece-size: 80px;
+
+    --container-width: 700px;
+    --container-padding: 20px;
+    --container-margin: 20px;
+    --container-background: #fff;
+    --container-border: 1px solid #ddd;
+}
