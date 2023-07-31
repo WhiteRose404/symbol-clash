@@ -2,8 +2,8 @@ import Piece from './index.mjs';
 import { colToDigit, digitToCol, horizontal_diagonal } from "../utils/index.mjs";
 
 export default class Rock extends Piece{
-    constructor(cell, color){
-        super(cell, color);
+    constructor(row, col, color){
+        super(row, col, "rock", color);
     }
     // isDead(){
     //     throw Error("Cannot call abstract method");
@@ -23,11 +23,6 @@ export default class Rock extends Piece{
         // left
         horizontal_diagonal(row, col, 0, -1, moves, this.color, chessBoard, frendlyFire);
         return moves;
-    }
-    canEat(to, board){
-        const moves = this.getMoves(board);
-        const { row, col } = to.getCell();
-        return moves.some(move => move.row === row && move.col === col);
     }
     searchPath(row, col){
         // const { row: currentRow, col: currentCol } = this.getCell();
@@ -105,11 +100,11 @@ export default class Rock extends Piece{
     // getColor(){
     //     throw Error("Cannot call abstract method");
     // }
-    getPiece(){
-        return {
-            type: "Rock",
-            color: this.color,
-            selected: this.selected,
-        }
-    }
+    // getPiece(){
+    //     return {
+    //         type: "Rock",
+    //         color: this.color,
+    //         selected: this.selected,
+    //     }
+    // }
 }

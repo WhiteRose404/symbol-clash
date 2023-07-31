@@ -13,24 +13,24 @@ export default class BlackPlayer extends Player{
         this.initializePieces();
     }
     initializePieces(){
-        this.pieces.push(new Rook("a8", "black"));
-        this.pieces.push(new Knight("b8", "black"));
-        this.pieces.push(new Bishop("c8", "black"));
-        this.pieces.push(new Queen("d8", "black"));
-        this.pieces.push(new Bishop("f8", "black"));
-        this.pieces.push(new Knight("g8", "black"));
-        this.pieces.push(new Rook("h8", "black"));
-        this.pieces.push(new Pawn("a7", "black"));
-        this.pieces.push(new Pawn("b7", "black"));
-        this.pieces.push(new Pawn("c7", "black"));
-        this.pieces.push(new Pawn("d7", "black"));
-        this.pieces.push(new Pawn("e7", "black"));
-        this.pieces.push(new Pawn("f7", "black"));
-        this.pieces.push(new Pawn("g7", "black"));
-        this.pieces.push(new Pawn("h7", "black"));
+        this.pieces.push(new Rook("8", "a", "black"));
+        this.pieces.push(new Knight("8", "b", "black"));
+        this.pieces.push(new Bishop("8", "c", "black"));
+        this.pieces.push(new Queen("8", "d", "black"));
+        this.pieces.push(new Bishop("8", "f", "black"));
+        this.pieces.push(new Knight("8", "g", "black"));
+        this.pieces.push(new Rook("8", "h", "black"));
+        this.pieces.push(new Pawn("7", "a", "black"));
+        this.pieces.push(new Pawn("7", "b", "black"));
+        this.pieces.push(new Pawn("7", "c", "black"));
+        this.pieces.push(new Pawn("7", "d", "black"));
+        this.pieces.push(new Pawn("7", "e", "black"));
+        this.pieces.push(new Pawn("7", "f", "black"));
+        this.pieces.push(new Pawn("7", "g", "black"));
+        this.pieces.push(new Pawn("7", "h", "black"));
 
         // set up the king
-        const king = new King("e8", "black");
+        const king = new King("8", "e", "black");
         // this.pieces.forEach(piece => {
         //     piece.setKing(king);
         // });

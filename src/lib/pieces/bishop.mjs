@@ -2,13 +2,10 @@ import Piece from './index.mjs';
 import { colToDigit, digitToCol, horizontal_diagonal } from "../utils/index.mjs";
 
 export default class Bishop extends Piece{
-    constructor(cell, color){
-        super(cell, color);
+    constructor(row, col, color){
+        super(row, col, "bishop", color);
     }
-    // isDead(){
-    //     throw Error("Cannot call abstract method");
-    // }
-    getMoves(board, frendlyFire = false){
+    getMoves(board){
         // the bishop can move in 4 diagonal directions
         // 1. up right
         // 2. up left
@@ -16,22 +13,16 @@ export default class Bishop extends Piece{
         // 4. down left
         const chessBoard = board.getBoard();
         const moves = [];
-        const row = parseInt(this.getCell().row) - 1; // for normalizing the row and col add +1 in the end
-        const col = colToDigit[this.getCell().col];
+        const { row, col } = this.getCellForBoard();
         // up right
-        horizontal_diagonal(row, col, -1, 1, moves, this.color, chessBoard, frendlyFire);
+        horizontal_diagonal(row, col, -1, 1, moves, this.color, chessBoard);
         // up left
-        horizontal_diagonal(row, col, -1, -1, moves, this.color, chessBoard, frendlyFire);
+        horizontal_diagonal(row, col, -1, -1, moves, this.color, chessBoard);
         // down right
-        horizontal_diagonal(row, col, 1, 1, moves, this.color, chessBoard, frendlyFire);
+        horizontal_diagonal(row, col, 1, 1, moves, this.color, chessBoard);
         // down left
-        horizontal_diagonal(row, col, 1, -1, moves, this.color, chessBoard, frendlyFire);
+        horizontal_diagonal(row, col, 1, -1, moves, this.color, chessBoard);
         return moves;
-    }
-    canEat(to, board){
-        const moves = this.getMoves(board);
-        const { row, col } = to.getCell();
-        return moves.some(move => move.row === row && move.col === col);
     }
     isBlocked(to, board){
         // const direction = (from, to) => {
@@ -70,21 +61,5 @@ export default class Bishop extends Piece{
         // const playground = board.getBoard();
         // return path.some(move => playground[move.row - 1][colToDigit[move.col]].getPiece().type !== 'ghost');
         return false;
-    }
-    // getCell(){
-    //     throw Error("Cannot call abstract method");
-    // }
-    // setCell(){
-    //     throw Error("Cannot call abstract method");
-    // }
-    // getColor(){
-    //     throw Error("Cannot call abstract method");
-    // }
-    getPiece(){
-        return {
-            type: "Bishop",
-            color: this.color,
-            selected: this.selected,
-        };
     }
 }

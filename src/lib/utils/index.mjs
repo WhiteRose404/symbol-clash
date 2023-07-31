@@ -23,30 +23,29 @@ export const digitToCol = {
 export const mapping = ({ row, col }) => {
     return {
         row: row - 1,
-        col: digitToCol[col]
-    }
-}
-export const remapped = ({ row, col }) => {
-    return {
-        row: row + 1,
         col: colToDigit[col]
     }
 }
+export const remapped = ( row, col ) => {
+    return {
+        row: row + 1,
+        col: digitToCol[col]
+    }
+}
 
-
+export const to1DArray = (i, j) => {
+    return j * 8 + i;
+}
 
 
 export const horizontal_diagonal = (row, col, dirow, dicol, moves, color, board, frendlyFire = false) => {
     row += dirow;
     col += dicol;
-    while(row >= 0 && row < 8 && col >= 0 && col < 8 && (frendlyFire || board[row][col].getPiece().color !== color)){
-        moves.push({
-            row: row + 1,
-            col: digitToCol[col],
-        });
-        if(!frendlyFire && board[row][col].getPiece().color !== "neutral") break;
-        if(frendlyFire && (board[row][col].getPiece().color !== "neutral" && board[row][col].getPiece().type !== "King")) break;
+    while(row >= 0 && row < 8 && col >= 0 && col < 8 && board[row][col].getColor() !== color){
+        moves.push(remapped(row, col));
+        if(board[row][col].getColor() !== "neutral") break;
         row += dirow;
         col += dicol;
     }
+    console.log(moves)
 }

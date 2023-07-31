@@ -2,13 +2,10 @@ import Piece from './index.mjs';
 import { colToDigit, digitToCol } from "../utils/index.mjs";
 
 export default class Pawn extends Piece{
-    constructor(cell, color){
-        super(cell, color);
+    constructor(row, col, color){
+        super(row, col, "pawn", color);
     }
-    // isDead(){
-    //     throw Error("Cannot call abstract method");
-    // }
-    getMoves(board, frendlyFire = false){
+    getMoves(board){
         if(this.isDead()){
             return [];
         }
@@ -16,11 +13,9 @@ export default class Pawn extends Piece{
         const path = [];
         const push = (row, col, sides, color) => {
             if(row >= 1 && row <= 8 && colToDigit[col] >= 0 && colToDigit[col] < 8){
-                const piece = chessBoard[row - 1][colToDigit[col]];
-                if((piece.getPiece().type === "ghost" && !sides && !frendlyFire) || (piece.getPiece().color === color && sides) || (frendlyFire && sides)){
-                    // console.log("stat:", (piece.getPiece().type === "ghost" && !sides && !frendlyFire), "state2:", (piece.getPiece().color === color && sides), "state3:", (frendlyFire && piece.getPiece().color !== this.color && sides));
-                    // console.dir(piece);
-                    // console.log("pushing:", row, col);
+                const piece = board.getPiece(row, col, chessBoard);
+                console.log("piece get type -------> ", piece, col, row)
+                if((piece.getType() === "empty" && !sides) || (piece.getColor() === color && sides)){
                     path.push({
                         col: col,
                         row: row,
@@ -62,14 +57,6 @@ export default class Pawn extends Piece{
         }
         return path;
     }
-    canEat(to, board){
-        const moves = this.getMoves(board);
-        const { row, col } = to.getCell();
-        if(moves.some(move => move.row === row && move.col === col)){
-            return true;
-        }
-        return false;
-    }
     isBlocked(to, board){
         // // in the case of a pawn we need to check if the move is blocked
         // // by another piece
@@ -108,11 +95,11 @@ export default class Pawn extends Piece{
     // getColor(){
     //     throw Error("Cannot call abstract method");
     // }
-    getPiece(){
-        return {
-            type: "Pawn",
-            color: this.color,
-            selected: this.selected,
-        }
-    }
+    // getPiece(){
+    //     return {
+    //         type: "Pawn",
+    //         color: this.color,
+    //         selected: this.selected,
+    //     }
+    // }
 }

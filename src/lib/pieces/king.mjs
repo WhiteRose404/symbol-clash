@@ -1,8 +1,8 @@
 import Piece from './index.mjs';
-import { colToDigit, digitToCol } from "../utils/index.mjs";
+import { colToDigit, digitToCol, remapped } from "../utils/index.mjs";
 export default class King extends Piece{
-    constructor(cell, color){
-        super(cell, color);
+    constructor(row, col, color){
+        super(row, col, "king", color);
         this.check = false;
     }
 
@@ -31,74 +31,64 @@ export default class King extends Piece{
         // if the king is in any of those moves
         // then the king is in check
         // if the king is in check
-
         const chessBoard = board.getBoard();
-        const rightfullMoves = [];
+        const moves = [];
         const push = (row, col) => {
-            if(chessBoard[row - 1][col].getPiece().color !== this.color || frendlyFire){
-                rightfullMoves.push({
-                    row: row,
-                    col: digitToCol[col]
-                });
+            const piece = board.getPiece(row, col, chessBoard);
+            if( piece.getColor() !== this.color ){
+                moves.push(remapped(row, col));
             }
         };
-        const row = parseInt(this.getCell().row) - 1; // for normalizing the row and col add +1 in the end
-        const col = colToDigit[this.getCell().col];
+        const { row, col } = this.getCellForBoard();
         // up
         if(row - 1 >= 0){
-            push(row, col);
+            push(row - 1, col);
         }
         // down
         if(row + 1 < 8){
-            push(row + 2, col);
+            push(row + 1, col);
         }
         // left
         if(col - 1 >= 0){
-            push(row + 1, col - 1);
+            push(row, col - 1);
         }
         // right
         if(col + 1 < 8){
-            push(row + 1, col + 1);
+            push(row, col + 1);
         }
         // up right
         if(row - 1 >= 0 && col + 1 < 8){
-            push(row, col + 1);
+            push(row - 1, col + 1);
         }
         // up left
         if(row - 1 >= 0 && col - 1 >= 0){
-            push(row, col - 1);
+            push(row - 1, col - 1);
         }
         // down right
         if(row + 1 < 8 && col + 1 < 8){
-            push(row + 2, col + 1);
+            push(row + 1, col + 1);
         }
         // down left
         if(row + 1 < 8 && col - 1 >= 0){
-            push(row + 2, col - 1);
+            push(row + 1, col - 1);
         }
-
         // to avoid the king to move to a square that is under attack
-        const illegalMoves = [];
-        if(!frendlyFire){
-            // ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // tmp solution
-            board.getPlayerPieces(this.color === "white" ? "black" : "white").forEach(piece => {
-                if(piece.getPiece().type === "ghost" || piece.isDead()) return;
-                // console.log("piece of oponente is: ", piece.getPiece());
-                // console.log("piece of oponente moves are: ", piece.getMoves(board, true));
-                illegalMoves.push(...piece.getMoves(board, true));
-            });
-            // ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        }
-        const moves = rightfullMoves.filter(move => {
-            return !illegalMoves.some(m => m.row === move.row && m.col === move.col);
-        });
+        // const illegalMoves = [];
+        // if(!frendlyFire){
+        //     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //     // tmp solution
+        //     board.getPlayerPieces(this.color === "white" ? "black" : "white").forEach(piece => {
+        //         if(piece.getPiece().type === "ghost" || piece.isDead()) return;
+        //         // console.log("piece of oponente is: ", piece.getPiece());
+        //         // console.log("piece of oponente moves are: ", piece.getMoves(board, true));
+        //         illegalMoves.push(...piece.getMoves(board, true));
+        //     });
+        //     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // }
+        // const moves = moves.filter(move => {
+        //     return !illegalMoves.some(m => m.row === move.row && m.col === move.col);
+        // });
         return moves;
-    }
-    canEat(to, board){
-        const moves = this.getMoves(board);
-        const { row, col } = to.getCell();
-        return moves.some(move => move.row === row && move.col === col);
     }
     isBlocked(to, board){
         // the king cannot be blocked ??? BRUH
@@ -120,12 +110,5 @@ export default class King extends Piece{
     }
     isChecked(){
         return this.check;
-    }
-    getPiece(){
-        return {
-            type: "King",
-            color: this.color,
-            selected: this.selected,
-        }
     }
 }

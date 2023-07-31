@@ -3,8 +3,8 @@ import { colToDigit, horizontal_diagonal, digitToCol } from "../utils/index.mjs"
 
 
 export default class Queen extends Piece{
-    constructor(cell, color){
-        super(cell, color);
+    constructor(row, col, color){
+        super(row, col, "queen", color);
     }
     // isDead(){
     //     throw Error("Cannot call abstract method");
@@ -36,11 +36,6 @@ export default class Queen extends Piece{
         horizontal_diagonal(row, col, 0, -1, moves, this.color, chessBoard, frendlyFire);
         // console.log("moves", moves);
         return moves;
-    }
-    canEat(to, board){
-        const moves = this.getMoves(board);
-        const { row, col } = to.getCell();
-        return moves.some(move => move.row === row && move.col === col);
     }
     searchPath(row, col){
         // const { row: currentRow, col: currentCol } = this.getCell();
@@ -151,11 +146,11 @@ export default class Queen extends Piece{
         // return this.isBlockedDiagonal(to, board);
         return false;
     }
-    getPiece(){
-        return {
-            type: "Queen",
-            color: this.color,
-            selected: this.selected,
-        }
-    }
+    // getPiece(){
+    //     return {
+    //         type: "Queen",
+    //         color: this.color,
+    //         selected: this.selected,
+    //     }
+    // }
 }

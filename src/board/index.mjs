@@ -3,7 +3,7 @@ import BlackPlayer from "../lib/players/local/black.mjs";
 import Board from "../lib/board/index.mjs";
 
 
-import { colToDigit } from "../lib/utils/index.mjs";
+import { mapping, to1DArray } from "../lib/utils/index.mjs";
 
 // game board
 const cells = document.querySelectorAll('#game-board .cell');
@@ -23,9 +23,8 @@ const game_history = [board];
 
 let alreadySelected = false;
 let initialPosition = null;
-
+updateBoard();
 cells.forEach((cell) => {
-    updateBoard();
     const row = parseInt(cell.dataset.row);
     const column = parseInt(cell.parentNode.dataset.column);
 
@@ -36,6 +35,12 @@ cells.forEach((cell) => {
             if(validInitailPosition.moved){
                 initialPosition = { row, column };
                 alreadySelected = true;
+                const moves = board.getPiece(row, column).getMoves(board);
+                moves.forEach(move => {
+                    const { row, col } = mapping(move);
+                    console.log("row, col", row, col)
+                    cells[to1DArray(row, col)].classList.add('target');
+                });
                 // error.classList.add('hidden');
             }else if(validInitailPosition.error){
                 error.innerHTML = validInitailPosition.error;
@@ -44,6 +49,14 @@ cells.forEach((cell) => {
         }else{
             const initialPiece = board.getPiece(initialPosition.row, initialPosition.column); // to be refactored
             const targetPiece = board.getPiece(row, column); // to be refactored
+            cells.forEach(cell => cell.classList.remove('target'));
+            if(initialPosition.row === row && initialPosition.column === column){
+                // deselect
+                alreadySelected = false;
+                initialPosition = null;
+                updateBoard();
+                return;
+            }
             const response = board.move(initialPiece, targetPiece);
             if(!response.moved){
                 // invalid move
@@ -75,8 +88,22 @@ function rollback(){
 
 // check if the piece is a valid initial position
 function checkingInitialPiece(row, col, chessBoard){
-    // to be specified
-
+    const piece = chessBoard.getPiece(row, col);
+    if(piece.getType() === "empty"){
+        return {
+            moved: false,
+            error: "You can't select an empty cell"
+        };
+    }else if(piece.getColor() !== chessBoard.getTurn()){
+        return {
+            moved: false,
+            error: "You can't select an opponent piece"
+        };
+    }
+    return {
+        moved: true,
+        error: ""
+    };
 }
 
 // update board
@@ -85,8 +112,8 @@ function updateBoard(){
     const chess = board.getBoard();
     for(let i = 0; i < 8; i++){
         for(let j = 0; j < 8; j++){
-            const piece = chess[i][j].getPiece();
-            cells[i * 8 + j].innerHTML = piece.type === "empty" ? "" : piece.type;
+            const piece = chess[i][j];
+            cells[to1DArray(i, j)].innerHTML = piece.getType() === "empty" ? "" : `<img loading="lazy" class="piece" src="/media/pieces/${piece.getColor()}/${piece.getType().toLowerCase()}.png" alt="${piece.getColor()}-${piece.getType()}">`;
         }
     }
 }

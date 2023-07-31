@@ -6,7 +6,8 @@ export default class Piece{
         this.col = col;
         this.type = type;
         this.color = color;
-        this.dead = false;
+        this.dead = dead;
+        this.firstMove = true;
     }
 
     // getters
@@ -43,9 +44,9 @@ export default class Piece{
 
     // methods
     move(target, board){
-        const { targetRow, targetCol } = target;
+        const { row: targetRow, col: targetCol } = target.getCell();
         const moves = this.getMoves(board);
-        const validMove = moves.find(move => move.row === targetRow && move.col === targetCol);
+        const validMove = moves.find(move => move.row == targetRow && move.col == targetCol);
         if(!validMove){
             return {
                 moved: false,

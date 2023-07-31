@@ -11,7 +11,8 @@ export default class Board {
         for(let i = 0; i < 8; i++){
             board.push([]);
             for(let j = 0; j < 8; j++){
-                const ghost = new Ghost(remapped(i, j));
+                const { row, col } = remapped(i, j);
+                const ghost = new Ghost(row, col);
                 board[i].push(ghost);
             }
         }
@@ -35,12 +36,21 @@ export default class Board {
     getBoard() {
         return this.createBoard();
     }
-    getPiece(row, col) {
-        const { row: mappedRow, col: mappedCol } = mapping({ row, col });
-        return this.board[mappedRow][mappedCol];
+    getPiece(row, col, board = this.getBoard()) {
+        let mappedRow = row;
+        let mappedCol = col;
+        if(typeof col === "string"){
+            const translation = mapping({ row, col });
+            mappedRow = translation.row;
+            mappedCol = translation.col;
+        }
+        return board[mappedRow][mappedCol];
     }
     getPlayerPieces(color) {
         return color === "white" ? this.whitePlayer.getPieces() : this.blackPlayer.getPieces();
+    }
+    getTurn() {
+        return this.turn;
     }
 
     // methods
@@ -50,8 +60,8 @@ export default class Board {
         const blackPieces = this.blackPlayer.getPieces();
         const fill = (piece) => {
             if(piece.isDead()) return;
-            const { row, col } = mapping(piece.getCellForBoard()); // accepts { row, col } and returns { row, col } 
-            board[row][col] = piece;                               // with the correct mapping
+            const { row, col } = piece.getCellForBoard(); // accepts { row, col } and returns { row, col } 
+            board[row][col] = piece;                      // with the correct mapping
         }
         for(let i = 0; i < 16; i++){
             fill(whitePieces[i]);
@@ -88,15 +98,16 @@ export default class Board {
         const response = initialPiece.move(targetPiece, this);
 
         if(response.moved){
-            const king = this.getPlayerPieces(this.turn).find(piece => piece.getPiece().type === "king");
-            if(king.isInCheck(this)){
-                return {
-                    moved: false,
-                    check: true,
-                    error: "You cannot leave your king in check"
-                }
-            }
+            // const king = this.getPlayerPieces(this.turn).find(piece => piece.getPiece().type === "king");
+            // if(king.isInCheck(this)){
+            //     return {
+            //         moved: false,
+            //         check: true,
+            //         error: "You cannot leave your king in check"
+            //     }
+            // }
             // change turn
+            initialPiece.firstMove = false;
             this.turn = this.turn === "white" ? "black" : "white";
         }
         return response;
