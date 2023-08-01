@@ -19,7 +19,8 @@ const error = document.querySelector('#error-box');
 const whitePlayer = new WhitePlayer();
 const blackPlayer = new BlackPlayer();
 let board = new Board(whitePlayer, blackPlayer);
-const game_history = [board];
+const game_history = [board.getSnapShot()]; // to be refactored: should store metadata only which
+                                            // will be used to create a new board
 
 let alreadySelected = false;
 let initialPosition = null;
@@ -30,15 +31,13 @@ cells.forEach((cell) => {
 
     cell.addEventListener('click', (e) => {
         e.preventDefault();
-        if(!alreadySelected){
+        if(!initialPosition){
             const validInitailPosition = checkingInitialPiece(row, column, board);
             if(validInitailPosition.moved){
                 initialPosition = { row, column };
-                alreadySelected = true;
                 const moves = board.getPiece(row, column).getMoves(board);
                 moves.forEach(move => {
                     const { row, col } = mapping(move);
-                    console.log("row, col", row, col)
                     cells[to1DArray(row, col)].classList.add('target');
                 });
                 // error.classList.add('hidden');
@@ -52,22 +51,21 @@ cells.forEach((cell) => {
             cells.forEach(cell => cell.classList.remove('target'));
             if(initialPosition.row === row && initialPosition.column === column){
                 // deselect
-                alreadySelected = false;
                 initialPosition = null;
                 updateBoard();
                 return;
             }
             const response = board.move(initialPiece, targetPiece);
+            game_history.push(board.getSnapShot());
             if(!response.moved){
+                // fix the check issue
                 // invalid move
                 if(response.check)
                     board = rollback();
                 error.innerHTML = response.error;
                 error.classList.remove('hidden');
-            }else{
-                alreadySelected = false;
-                initialPosition = null;
             }
+            initialPosition = null;
         }
         updateBoard();
     });
@@ -77,11 +75,13 @@ cells.forEach((cell) => {
 function rollback(){
     // return the board to the previous state
     // and return the board
+    console.log("activated rollback")
     if(game_history.length === 1){
         console.warn("You can't rollback anymore");
         return game_history[0];
     }
     game_history.pop();
+    console.log("game_history", game_history);
     return game_history[game_history.length - 1];
 }
 
@@ -108,8 +108,9 @@ function checkingInitialPiece(row, col, chessBoard){
 
 // update board
 function updateBoard(){
-    // to be specified
     const chess = board.getBoard();
+    // console.log(board, chess)
+
     for(let i = 0; i < 8; i++){
         for(let j = 0; j < 8; j++){
             const piece = chess[i][j];
