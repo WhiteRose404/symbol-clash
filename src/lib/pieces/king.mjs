@@ -1,11 +1,12 @@
 import Piece from './index.mjs';
 import { colToDigit, digitToCol, remapped } from "../utils/index.mjs";
 export default class King extends Piece{
-    constructor(row, col, color){
-        super(row, col, "king", color);
+    constructor(row, col, color, dead = false, firstMove = true){
+        super(row, col, "king", color, dead, firstMove);
         this.check = false;
     }
 
+    // getters
     getMoves(board, frendlyFire = false){
         // the king is one of the most important pieces in the game
         // yet its one of the hardest to implement
@@ -31,6 +32,9 @@ export default class King extends Piece{
         // if the king is in any of those moves
         // then the king is in check
         // if the king is in check
+
+
+        
         const chessBoard = board.getBoard();
         const moves = [];
         const push = (row, col) => {
@@ -72,28 +76,24 @@ export default class King extends Piece{
         if(row + 1 < 8 && col - 1 >= 0){
             push(row + 1, col - 1);
         }
-        // to avoid the king to move to a square that is under attack
-        // const illegalMoves = [];
-        // if(!frendlyFire){
-        //     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //     // tmp solution
-        //     board.getPlayerPieces(this.color === "white" ? "black" : "white").forEach(piece => {
-        //         if(piece.getPiece().type === "ghost" || piece.isDead()) return;
-        //         // console.log("piece of oponente is: ", piece.getPiece());
-        //         // console.log("piece of oponente moves are: ", piece.getMoves(board, true));
-        //         illegalMoves.push(...piece.getMoves(board, true));
-        //     });
-        //     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // }
-        // const moves = moves.filter(move => {
-        //     return !illegalMoves.some(m => m.row === move.row && m.col === move.col);
-        // });
         return moves;
     }
     isBlocked(to, board){
         // the king cannot be blocked ??? BRUH
         return false;
     }
+    isChecked(board){
+        const opponentPieces = board.getPlayerPieces(this.color === "white" ? "black" : "white");
+        // console.log("opponentPieces", opponentPieces, "who is this", this.color);        
+        const setTarget = opponentPieces.filter(piece => {
+            if(piece.getType() === "empty" || piece.isDead()) return false;
+            const moves = piece.getMoves(board);
+            return moves.some(move => move.row === this.row && move.col === this.col);
+        });
+        return setTarget.length > 0;
+    }
+
+    // setters
     setKingEnemys(board, opponent){
         // const chessBoard = board.getBoard();
         const opponentPieces = opponent.getPieces();
@@ -107,8 +107,5 @@ export default class King extends Piece{
         });
         console.log("row", this.row, "col", this.col, "setTarget", setTarget)
         this.check = setTarget.length > 0;
-    }
-    isChecked(){
-        return this.check;
     }
 }

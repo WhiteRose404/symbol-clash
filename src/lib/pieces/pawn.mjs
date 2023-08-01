@@ -2,8 +2,8 @@ import Piece from './index.mjs';
 import { colToDigit, digitToCol } from "../utils/index.mjs";
 
 export default class Pawn extends Piece{
-    constructor(row, col, color){
-        super(row, col, "pawn", color);
+    constructor(row, col, color, dead = false, firstMove = true){
+        super(row, col, "pawn", color, dead, firstMove);
     }
     getMoves(board){
         if(this.isDead()){
@@ -14,7 +14,6 @@ export default class Pawn extends Piece{
         const push = (row, col, sides, color) => {
             if(row >= 1 && row <= 8 && colToDigit[col] >= 0 && colToDigit[col] < 8){
                 const piece = board.getPiece(row, col, chessBoard);
-                console.log("piece get type -------> ", piece, col, row)
                 if((piece.getType() === "empty" && !sides) || (piece.getColor() === color && sides)){
                     path.push({
                         col: col,

@@ -3,8 +3,8 @@ import { colToDigit, horizontal_diagonal, digitToCol } from "../utils/index.mjs"
 
 
 export default class Queen extends Piece{
-    constructor(row, col, color){
-        super(row, col, "queen", color);
+    constructor(row, col, color, dead = false, firstMove = true){
+        super(row, col, "queen", color, dead, firstMove);
     }
     // isDead(){
     //     throw Error("Cannot call abstract method");
@@ -18,22 +18,22 @@ export default class Queen extends Piece{
         const col = colToDigit[this.getCell().col];
 
         // up right
-        horizontal_diagonal(row, col, -1, 1, moves, this.color, chessBoard, frendlyFire);
+        horizontal_diagonal(row, col, -1, 1, moves, this.color, chessBoard);
         // up left
-        horizontal_diagonal(row, col, -1, -1, moves, this.color, chessBoard, frendlyFire);
+        horizontal_diagonal(row, col, -1, -1, moves, this.color, chessBoard);
         // down right
-        horizontal_diagonal(row, col, 1, 1, moves, this.color, chessBoard, frendlyFire);
+        horizontal_diagonal(row, col, 1, 1, moves, this.color, chessBoard);
         // down left
-        horizontal_diagonal(row, col, 1, -1, moves, this.color, chessBoard, frendlyFire);
+        horizontal_diagonal(row, col, 1, -1, moves, this.color, chessBoard);
 
         // up
-        horizontal_diagonal(row, col, -1, 0, moves, this.color, chessBoard, frendlyFire);
+        horizontal_diagonal(row, col, -1, 0, moves, this.color, chessBoard);
         // down
-        horizontal_diagonal(row, col, 1, 0, moves, this.color, chessBoard, frendlyFire);
+        horizontal_diagonal(row, col, 1, 0, moves, this.color, chessBoard);
         // right
-        horizontal_diagonal(row, col, 0, 1, moves, this.color, chessBoard, frendlyFire);
+        horizontal_diagonal(row, col, 0, 1, moves, this.color, chessBoard);
         // left
-        horizontal_diagonal(row, col, 0, -1, moves, this.color, chessBoard, frendlyFire);
+        horizontal_diagonal(row, col, 0, -1, moves, this.color, chessBoard);
         // console.log("moves", moves);
         return moves;
     }

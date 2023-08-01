@@ -18,8 +18,6 @@ export const digitToCol = {
     6: 'g',
     7: 'h'
 }
-
-
 export const mapping = ({ row, col }) => {
     return {
         row: row - 1,
@@ -32,12 +30,9 @@ export const remapped = ( row, col ) => {
         col: digitToCol[col]
     }
 }
-
 export const to1DArray = (i, j) => {
     return j * 8 + i;
 }
-
-
 export const horizontal_diagonal = (row, col, dirow, dicol, moves, color, board, frendlyFire = false) => {
     row += dirow;
     col += dicol;
@@ -47,5 +42,4 @@ export const horizontal_diagonal = (row, col, dirow, dicol, moves, color, board,
         row += dirow;
         col += dicol;
     }
-    console.log(moves)
 }

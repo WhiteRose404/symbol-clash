@@ -1,18 +1,21 @@
 import { mapping } from '../utils/index.mjs';
 
 export default class Piece{
-    constructor(row, col, type, color, dead = false){
+    constructor(row, col, type, color, dead, firstMove){
         this.row = row;
         this.col = col;
         this.type = type;
         this.color = color;
         this.dead = dead;
-        this.firstMove = true;
+        this.firstMove = firstMove;
     }
 
     // getters
     isDead(){
         return this.dead;
+    }
+    isFirstMove(){
+        return this.firstMove;
     }
     getCell(){
         return {
@@ -61,6 +64,16 @@ export default class Piece{
         // move the piece
         this.row = targetRow;
         this.col = targetCol;
+        const king = board.getPlayerKing(this.color); // get the crossponding king
+        const isChecked = king.isChecked(board);
+        if(isChecked){
+            // undo the move
+            return {
+                moved: false,
+                error: "You cannot leave your king in check",
+                check: true
+            }
+        }
         return {
             moved: true,
             error: ""
