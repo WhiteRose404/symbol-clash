@@ -8,20 +8,20 @@ export default class Rock extends Piece{
     // isDead(){
     //     throw Error("Cannot call abstract method");
     // }
-    getMoves(board, frendlyFire = false){
+    getMoves(board){
         const chessBoard = board.getBoard();
         const moves = [];
         // console.log("in Rock getMoves", this.col, this.row);
         const row = parseInt(this.getCell().row) - 1; // for normalizing the row and col add +1 in the end
         const col = colToDigit[this.getCell().col];
         // up
-        horizontal_diagonal(row, col, -1, 0, moves, this.color, chessBoard, frendlyFire);
+        horizontal_diagonal(row, col, -1, 0, moves, this.color, chessBoard);
         // down
-        horizontal_diagonal(row, col, 1, 0, moves, this.color, chessBoard, frendlyFire);
+        horizontal_diagonal(row, col, 1, 0, moves, this.color, chessBoard);
         // right
-        horizontal_diagonal(row, col, 0, 1, moves, this.color, chessBoard, frendlyFire);
+        horizontal_diagonal(row, col, 0, 1, moves, this.color, chessBoard);
         // left
-        horizontal_diagonal(row, col, 0, -1, moves, this.color, chessBoard, frendlyFire);
+        horizontal_diagonal(row, col, 0, -1, moves, this.color, chessBoard);
         return moves;
     }
     // searchPath(row, col){

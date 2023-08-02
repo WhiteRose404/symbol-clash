@@ -5,7 +5,7 @@ export default class Knight extends Piece{
     constructor(row, col, color, dead = false, firstMove = true){
         super(row, col, "knight", color, dead, firstMove);
     }
-    getMoves(board, frendlyFire = false){
+    getMoves(board){
         // the knight can move in 8 directions
         const chessBoard = board.getBoard();
         const moves = [];

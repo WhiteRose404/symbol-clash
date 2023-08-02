@@ -3,7 +3,7 @@ import BlackPlayer from "../lib/players/local/black.mjs";
 import Board from "../lib/board/index.mjs";
 
 
-import { mapping, to1DArray } from "../lib/utils/index.mjs";
+import { createBoardFromSnapShot, mapping, to1DArray } from "../lib/utils/index.mjs";
 
 // game board
 const cells = document.querySelectorAll('#game-board .cell');
@@ -60,8 +60,10 @@ cells.forEach((cell) => {
             if(!response.moved){
                 // fix the check issue
                 // invalid move
-                if(response.check)
+                if(response.check){
                     board = rollback();
+                    
+                }
                 error.innerHTML = response.error;
                 error.classList.remove('hidden');
             }
@@ -76,13 +78,15 @@ function rollback(){
     // return the board to the previous state
     // and return the board
     console.log("activated rollback")
-    if(game_history.length === 1){
+    if(game_history.length === 1)
         console.warn("You can't rollback anymore");
-        return game_history[0];
-    }
-    game_history.pop();
+    else if(game_history.length > 1)
+        game_history.pop();
+    else 
+        new Error("Rollback error");
     console.log("game_history", game_history);
-    return game_history[game_history.length - 1];
+    const new_board = createBoardFromSnapShot(game_history[game_history.length - 1]);
+    return new_board;
 }
 
 
@@ -114,7 +118,9 @@ function updateBoard(){
     for(let i = 0; i < 8; i++){
         for(let j = 0; j < 8; j++){
             const piece = chess[i][j];
-            cells[to1DArray(i, j)].innerHTML = piece.getType() === "empty" ? "" : `<img loading="lazy" class="piece" src="/media/pieces/${piece.getColor()}/${piece.getType().toLowerCase()}.png" alt="${piece.getColor()}-${piece.getType()}">`;
+            const type = piece.getType();
+            const color = piece.getColor();
+            cells[to1DArray(i, j)].innerHTML = type === "empty" ? "" : `<img loading="lazy" class="piece ${type === "king" && piece.isChecked(board) ? "check": ""}" src="/media/pieces/${color}/${type.toLowerCase()}.png" alt="${color}-${type}">`;
         }
     }
 }

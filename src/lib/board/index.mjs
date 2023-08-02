@@ -3,14 +3,6 @@ import { mapping, remapped } from '../utils/index.mjs';
 // mapped convert from chess notation to array notation
 // remapped convert from array notation to chess notation
 import Ghost from "../pieces/ghost.mjs";
-import Pawn from "../pieces/pawn.mjs";
-import Rook from "../pieces/rock.mjs";
-import Knight from "../pieces/knight.mjs";
-import Bishop from "../pieces/bishop.mjs";
-import Queen from "../pieces/queen.mjs";
-import King from "../pieces/king.mjs";
-import WhitePlayer from "../players/local/white.mjs";
-import BlackPlayer from "../players/local/black.mjs";
 
 export default class Board {    
     // intern methods
@@ -45,46 +37,23 @@ export default class Board {
                 const { row, col, color, type } = arr[i].getCell();
                 const dead = arr[i].isDead();
                 const firstMove = arr[i].isFirstMove();
-                let element;
-                switch(type){
-                    case "empty":
-                        element = new Ghost(row, col);
-                        break;
-                    case "pawn":
-                        element = new Pawn(row, col, color, dead, firstMove);
-                        break;
-                    case "rock":
-                        element = new Rook(row, col, color, dead, firstMove);
-                        break;
-                    case "knight":
-                        element = new Knight(row, col, color, dead, firstMove);
-                        break;
-                    case "bishop":
-                        element = new Bishop(row, col, color, dead, firstMove);
-                        break;
-                    case "queen":
-                        element = new Queen(row, col, color, dead, firstMove);
-                        break;
-                    case "king":
-                        element = new King(row, col, color, dead, firstMove);
-                        break;
+                const element = {
+                    row, col, color, type, dead, firstMove
                 }
-                if(!element) {
-                    console.log(arr[i]);
-                    console.log(row, col, color, type, dead, firstMove)
+                if(type === "empty"){
+                    new Error("Snapshot: invalid piece type");
                 }
                 copy.push(element);
             }
             return copy;
         }
-        // console.log('white', this.getPlayerPieces("white"))
         const whitePiecesCopy = deep_copy(this.getPlayerPieces("white"));
         const blackPiecesCopy = deep_copy(this.getPlayerPieces("black"));
-        const whiteCopy = new WhitePlayer(whitePiecesCopy);
-        const blackCopy = new BlackPlayer(blackPiecesCopy);
-        const boardCopy = new Board(whiteCopy, blackCopy, this.turn);
-        console.log(boardCopy)
-        return boardCopy;
+        return {
+            white: whitePiecesCopy,
+            black: blackPiecesCopy,
+            turn: this.turn
+        };
     }
     getBoard() {
         return this.createBoard();
@@ -158,6 +127,10 @@ export default class Board {
         if(response.moved){
             initialPiece.firstMove = false;
             this.turn = this.turn === "white" ? "black" : "white";
+            // switched turn
+            // check whether the king is dead
+            // const king = this.getPlayerKing(this.turn);
+            // console.log(`the ${this.turn} king is dead ? ${king.isCheckMate(this)}`);
         }
         return response;
     }

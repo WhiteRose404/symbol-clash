@@ -9,7 +9,7 @@ export default class Queen extends Piece{
     // isDead(){
     //     throw Error("Cannot call abstract method");
     // }
-    getMoves(board, frendlyFire = false){
+    getMoves(board){
         // the queen can move in 8 directions
         // moves = rook moves + bishop moves
         const chessBoard = board.getBoard();

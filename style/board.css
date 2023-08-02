@@ -99,6 +99,6 @@
     /* opacity: 0.5; */
 }
 
-#game-board .cell.check {
+#game-board .cell>.check {
     background-color: orangered !important;
 }

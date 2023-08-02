@@ -39,12 +39,7 @@ export default class Piece{
     }
     kill(){
         this.dead = true;
-        this.row = null;
-        this.col = null;
-        this.type = "empty";
-        this.color = "neutral";
     }
-
     // methods
     move(target, board){
         const { row: targetRow, col: targetCol } = target.getCell();

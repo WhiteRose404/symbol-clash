@@ -7,7 +7,7 @@ export default class King extends Piece{
     }
 
     // getters
-    getMoves(board, frendlyFire = false){
+    getMoves(board){
         // the king is one of the most important pieces in the game
         // yet its one of the hardest to implement
         // the king can move one step in any direction
@@ -78,34 +78,34 @@ export default class King extends Piece{
         }
         return moves;
     }
-    isBlocked(to, board){
-        // the king cannot be blocked ??? BRUH
-        return false;
+    isCheckMate(board){
+        // the king is in check
+        const attackers = this.setKingEnemys(board);
+        if(attackers.length === 0) return false;
+        // the king can move to a safe square
+        const moves = this.getMoves(board);
+        attackers.forEach(piece => {
+            piece.getMoves(board).forEach(attack => {
+                const safe = moves.some(move => move.row !== attack.row || move.col !== attack.col);
+                if(safe) return false;
+            });
+        });
+        console.log("safe", moves, attackers);
+        return true;
     }
     isChecked(board){
+        const targets = this.setKingEnemys(board);
+        return targets.length > 0;
+    }
+
+    // setters
+    setKingEnemys(board){
         const opponentPieces = board.getPlayerPieces(this.color === "white" ? "black" : "white");
-        // console.log("opponentPieces", opponentPieces, "who is this", this.color);        
         const setTarget = opponentPieces.filter(piece => {
             if(piece.getType() === "empty" || piece.isDead()) return false;
             const moves = piece.getMoves(board);
             return moves.some(move => move.row === this.row && move.col === this.col);
         });
-        return setTarget.length > 0;
-    }
-
-    // setters
-    setKingEnemys(board, opponent){
-        // const chessBoard = board.getBoard();
-        const opponentPieces = opponent.getPieces();
-        const setTarget = opponentPieces.filter(piece => {
-            if(piece.getPiece().type === "ghost" || piece.isDead()) return false;
-            const moves = piece.getMoves(board);
-            return moves.some(move => move.row === this.row && move.col === this.col);
-        });
-        setTarget.forEach(piece => {
-            console.log("piece", piece.getMoves(board));
-        });
-        console.log("row", this.row, "col", this.col, "setTarget", setTarget)
-        this.check = setTarget.length > 0;
+        return setTarget;
     }
 }
