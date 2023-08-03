@@ -1,5 +1,5 @@
 import Piece from './index.mjs';
-import { colToDigit, digitToCol, remapped } from "../utils/index.mjs";
+import { colToDigit, digitToCol, remapped, createBoardFromSnapShot } from "../utils/index.mjs";
 export default class King extends Piece{
     constructor(row, col, color, dead = false, firstMove = true){
         super(row, col, "king", color, dead, firstMove);
@@ -81,16 +81,64 @@ export default class King extends Piece{
     isCheckMate(board){
         // the king is in check
         const attackers = this.setKingEnemys(board);
-        if(attackers.length === 0) return false;
-        // the king can move to a safe square
+        if(attackers.length === 0) return false; // the king is not in check
+
+        // the king cannot move to a safe square
         const moves = this.getMoves(board);
-        attackers.forEach(piece => {
-            piece.getMoves(board).forEach(attack => {
-                const safe = moves.some(move => move.row !== attack.row || move.col !== attack.col);
-                if(safe) return false;
-            });
+        const opponentPieces = board.getPlayerPieces(this.color === "white" ? "black" : "white");
+        const safeMoves = moves.filter(move => {
+            const { row, col } = move;
+            const targets = this._safeCell(board, opponentPieces, row, col); 
+            return targets.length === 0;
+            // the case where the king can capture the attacker is considered here
+            // since the opponentPieces array does not contain the attacker initial position
+            // actually it does but the attacker is protected by another piece
+            // so the king cannot capture the attacker
+
+            // for now we have one way to discove whether the king is in check
+            // is by actually making the move and then see if the our king is in check if thats the case
+            // we would simply rollback, naive approach but it works for now.
+            // with this new requirement we need to implement a new method in the board class
+            // called fakeMove which will make a move and return the board
+            // and another method called rollback which will rollback the board to its previous state
+
+            // the fakeMove if showed promise will be used globally in the game
+            // getting rid of the early implementation of the rollback method
+
         });
-        console.log("safe", moves, attackers);
+        if(safeMoves.length > 0){
+            // we have safe moves, but do we actually can move there with the king 
+            // the king cannot move if theres another piece protecting it (the safe move)
+            const poisenedSafeMoves = safeMoves.filter(move => {
+                // const newBoard = board.fakeMove(this, move); // need to implement this method
+                const newBoard = createBoardFromSnapShot(board.getSnapShot());
+                const target = newBoard.getPiece(move.row, move.col);
+                const init = newBoard.getPiece(this.row, this.col);
+                const response = newBoard.move(init, target);
+                console.log(newBoard.getPlayerKing(this.color), board.getPlayerKing(this.color));
+                return !response.moved;
+            });
+            console.log(safeMoves, poisenedSafeMoves)
+            if(poisenedSafeMoves.length > 0) return false;
+        }
+        
+        // the king can be protected by another piece
+        // burte force for now
+        // const alias = board.getPlayerPieces(this.color);
+        // const protectors = alias.filter(piece => {
+        //     if(piece.getType() === "empty" || piece.isDead()) return false;
+        //     const moves = piece.getMoves(board);
+        //     return moves.some(move => {
+        //         // const newBoard = board.fakeMove(piece, move);
+        //         const newBoard = createBoardFromSnapShot(board.getSnapShot());
+        //         const target = newBoard.getPiece(move.row, move.col);
+        //         const response = newBoard.move(this, target);
+        //         return !response.moved;
+        //     });
+        // });
+        // if(protectors.length > 0) return false;
+
+        // the king is dead RIP
         return true;
     }
     isChecked(board){
@@ -101,10 +149,17 @@ export default class King extends Piece{
     // setters
     setKingEnemys(board){
         const opponentPieces = board.getPlayerPieces(this.color === "white" ? "black" : "white");
+        return this._safeCell(board, opponentPieces, this.row, this.col);
+    }
+
+    // methods
+    _safeCell(board, opponentPieces, row, col){
+        // return the attacker if the cell is not safe
+        // belongs to utils/index.mjs
         const setTarget = opponentPieces.filter(piece => {
             if(piece.getType() === "empty" || piece.isDead()) return false;
             const moves = piece.getMoves(board);
-            return moves.some(move => move.row === this.row && move.col === this.col);
+            return moves.some(move => move.row === row && move.col === col);
         });
         return setTarget;
     }

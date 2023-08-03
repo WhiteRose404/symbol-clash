@@ -129,8 +129,8 @@ export default class Board {
             this.turn = this.turn === "white" ? "black" : "white";
             // switched turn
             // check whether the king is dead
-            // const king = this.getPlayerKing(this.turn);
-            // console.log(`the ${this.turn} king is dead ? ${king.isCheckMate(this)}`);
+            const king = this.getPlayerKing(this.turn);
+            console.log(`the ${this.turn} king is dead ? ${king.isCheckMate(this)}`);
         }
         return response;
     }
