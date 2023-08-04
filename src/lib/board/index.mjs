@@ -130,6 +130,13 @@ export default class Board {
             // switched turn
             // check whether the king is dead
             const king = this.getPlayerKing(this.turn);
+            if(king.isCheckMate(this)){
+                return  {
+                    moved: true,
+                    checkMate: true,
+                    error: ""
+                }
+            }
             console.log(`the ${this.turn} king is dead ? ${king.isCheckMate(this)}`);
         }
         return response;

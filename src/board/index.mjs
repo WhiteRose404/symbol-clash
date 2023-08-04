@@ -28,8 +28,8 @@ updateBoard();
 cells.forEach((cell) => {
     const row = parseInt(cell.dataset.row);
     const column = parseInt(cell.parentNode.dataset.column);
-
-    cell.addEventListener('click', (e) => {
+    cell.addEventListener('click', handleClick);
+    function handleClick (e){
         e.preventDefault();
         if(!initialPosition){
             const validInitailPosition = checkingInitialPiece(row, column, board);
@@ -62,17 +62,32 @@ cells.forEach((cell) => {
                 // invalid move
                 if(response.check){
                     board = rollback();
-                    
                 }
                 error.innerHTML = response.error;
                 error.classList.remove('hidden');
             }
+            // there is a checkmate
+            if(response.checkMate){
+                // game over
+                // show the winner
+                // show the play again button
+                // back to the main menu
+                // show the game history
+
+                // remove the event listener
+                removeListeners();
+                console.log("checkmate");
+                console.log("game_history", game_history);
+            }
+
             initialPosition = null;
         }
         updateBoard();
-    });
+    }
+    function removeListeners(){
+        cells.forEach(cell => cell.removeEventListener('click', handleClick));
+    }
 });
-
 
 function rollback(){
     // return the board to the previous state

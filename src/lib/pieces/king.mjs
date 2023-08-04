@@ -118,25 +118,33 @@ export default class King extends Piece{
                 console.log(newBoard.getPlayerKing(this.color), board.getPlayerKing(this.color));
                 return !response.moved;
             });
-            console.log(safeMoves, poisenedSafeMoves)
             if(poisenedSafeMoves.length > 0) return false;
         }
         
         // the king can be protected by another piece
         // burte force for now
-        // const alias = board.getPlayerPieces(this.color);
-        // const protectors = alias.filter(piece => {
-        //     if(piece.getType() === "empty" || piece.isDead()) return false;
-        //     const moves = piece.getMoves(board);
-        //     return moves.some(move => {
-        //         // const newBoard = board.fakeMove(piece, move);
-        //         const newBoard = createBoardFromSnapShot(board.getSnapShot());
-        //         const target = newBoard.getPiece(move.row, move.col);
-        //         const response = newBoard.move(this, target);
-        //         return !response.moved;
-        //     });
-        // });
-        // if(protectors.length > 0) return false;
+
+        // optimization: we can get the pieces that are protecting the king
+        // we can use them to make future decisions
+        const alias = board.getPlayerPieces(this.color);
+        const protectors = alias.filter(piece => {
+            if(piece.getType() === "empty" || piece.isDead()) return false;
+            const moves = piece.getMoves(board);
+            const { row, col } = piece.getCell();
+            const hasPotential = moves.some(move => {
+                // const newBoard = board.fakeMove(piece, move);
+                const newBoard = createBoardFromSnapShot(board.getSnapShot());
+                // newBoard.specialMark = true; be aware that when you make a fake move
+                // the code will also check for checkmate inside of the virtual board
+                // luckily the first condition is met since that piece will be protecting the king
+                const target = newBoard.getPiece(move.row, move.col);
+                const init = newBoard.getPiece(row, col);
+                const response = newBoard.move(init, target);
+                return response.moved;
+            });
+            return hasPotential;
+        });
+        if(protectors.length > 0) return false;
 
         // the king is dead RIP
         return true;
