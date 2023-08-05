@@ -24,6 +24,11 @@ export default class Rock extends Piece{
         horizontal_diagonal(row, col, 0, -1, moves, this.color, chessBoard);
         return moves;
     }
+    move(target, board){
+        const response = super.move(target, board);
+        return response;
+    }
+
     // searchPath(row, col){
     //     // const { row: currentRow, col: currentCol } = this.getCell();
     //     // // rock can move in 2 directions

@@ -66,6 +66,7 @@ export default class Board {
             mappedRow = translation.row;
             mappedCol = translation.col;
         }
+        console.log("mapped", mappedRow, mappedCol)
         return board[mappedRow][mappedCol];
     }
     getPlayerPieces(color) {
@@ -130,6 +131,7 @@ export default class Board {
             // switched turn
             // check whether the king is dead
             const king = this.getPlayerKing(this.turn);
+            console.log(`the ${this.turn} king allow to castle ? ${king.castling(this)}`);
             if(king.isCheckMate(this)){
                 return  {
                     moved: true,
@@ -137,7 +139,6 @@ export default class Board {
                     error: ""
                 }
             }
-            console.log(`the ${this.turn} king is dead ? ${king.isCheckMate(this)}`);
         }
         return response;
     }

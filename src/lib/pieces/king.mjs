@@ -1,5 +1,5 @@
 import Piece from './index.mjs';
-import { colToDigit, digitToCol, remapped, createBoardFromSnapShot } from "../utils/index.mjs";
+import { remapped, createBoardFromSnapShot } from "../utils/index.mjs";
 export default class King extends Piece{
     constructor(row, col, color, dead = false, firstMove = true){
         super(row, col, "king", color, dead, firstMove);
@@ -76,6 +76,7 @@ export default class King extends Piece{
         if(row + 1 < 8 && col - 1 >= 0){
             push(row + 1, col - 1);
         }
+
         return moves;
     }
     isCheckMate(board){
@@ -170,5 +171,50 @@ export default class King extends Piece{
             return moves.some(move => move.row === row && move.col === col);
         });
         return setTarget;
+    }
+    castling(board){
+        // special move: castling
+        // the king can switch places with the rook if the following conditions are met
+        // 1. the king and the rook have not moved
+        // 2. there are no pieces between the king and the rook
+        // 3. the king is not in check
+        // 4. the king will not be in check after castling
+
+        // king has not moved
+        if(!this.firstMove) return moves;
+
+        // the king is not in check
+        // if(this.isChecked(board)) return moves; error: infinite loop 
+
+        // safe passage
+        const safePassageCastling = (init, target) => {
+            const { row: initRow, col: initCol } = init.getCellForBoard();
+            const { row: targetRow, col: targetCol } = target.getCellForBoard();
+            // basic checks rook side
+            if(target.getType() !== "rock") return false;
+            if(initRow !== targetRow) return false;
+            if(!target.getFirstMove()) return false;
+
+            // check if there are pieces between the king and the rook
+            const colDiff = Math.abs(initCol - targetCol);
+            const colDirection = initCol > targetCol ? -1 : 1;
+            for(let i = 1; i < colDiff; i++){
+                const col = initCol + (i * colDirection);
+                const piece = board.getPiece(initRow, col);
+                if(piece.getType() !== "empty") return false;
+            }
+            return true;
+        };
+        // the king cannot castle if there are pieces between the king and the rook
+        const leftRock = board.getPiece(this.row, 0);
+        const left = safePassageCastling(this, leftRock);
+        if(left){
+            console.log("can castle left");
+        }
+        const rightRock = board.getPiece(row, 7);
+        const right = safePassageCastling(this, rightRock);
+        if(right){
+            console.log("can castle right");
+        }
     }
 }
