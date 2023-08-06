@@ -181,10 +181,11 @@ export default class King extends Piece{
         // 4. the king will not be in check after castling
 
         // king has not moved
-        if(!this.firstMove) return moves;
+        if(!this.firstMove) return false;
 
         // the king is not in check
-        // if(this.isChecked(board)) return moves; error: infinite loop 
+        // if(this.isChecked(board)) return moves; error: infinite loop
+        // go arround this
 
         // safe passage
         const safePassageCastling = (init, target) => {
@@ -193,7 +194,7 @@ export default class King extends Piece{
             // basic checks rook side
             if(target.getType() !== "rock") return false;
             if(initRow !== targetRow) return false;
-            if(!target.getFirstMove()) return false;
+            if(!target.isFirstMove()) return false;
 
             // check if there are pieces between the king and the rook
             const colDiff = Math.abs(initCol - targetCol);
@@ -201,20 +202,24 @@ export default class King extends Piece{
             for(let i = 1; i < colDiff; i++){
                 const col = initCol + (i * colDirection);
                 const piece = board.getPiece(initRow, col);
+                // backword check: from this position scan the board in all directions
+                // and check if there are any pieces that can attack this cell
+                // if there are then the king cannot castle
                 if(piece.getType() !== "empty") return false;
             }
             return true;
         };
         // the king cannot castle if there are pieces between the king and the rook
-        const leftRock = board.getPiece(this.row, 0);
+        const leftRock = board.getPiece(this.row, 'a');
         const left = safePassageCastling(this, leftRock);
         if(left){
-            console.log("can castle left");
+            return "yes to the left"
         }
-        const rightRock = board.getPiece(row, 7);
+        const rightRock = board.getPiece(this.row, 'h');
         const right = safePassageCastling(this, rightRock);
         if(right){
-            console.log("can castle right");
+            return "yes to the right"
         }
+        return "no";
     }
 }

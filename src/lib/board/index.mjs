@@ -66,7 +66,6 @@ export default class Board {
             mappedRow = translation.row;
             mappedCol = translation.col;
         }
-        console.log("mapped", mappedRow, mappedCol)
         return board[mappedRow][mappedCol];
     }
     getPlayerPieces(color) {
