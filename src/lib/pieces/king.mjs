@@ -77,6 +77,20 @@ export default class King extends Piece{
             push(row + 1, col - 1);
         }
 
+
+        // special move: castling
+        // the king can switch places with the rook if the following conditions are met
+        // 1. the king and the rook have not moved
+        // 2. there are no pieces between the king and the rook
+        // 3. the king is not in check
+        // 4. the king will not be in check after castling
+        const { right, left } = this.castling(board);
+        if(right){
+            moves.push(remapped(row, col + 2));
+        }
+        if(left){
+            moves.push(remapped(row, col - 2));
+        }
         return moves;
     }
     isCheckMate(board){
@@ -162,15 +176,45 @@ export default class King extends Piece{
     }
 
     // methods
-    _safeCell(board, opponentPieces, row, col){
-        // return the attacker if the cell is not safe
-        // belongs to utils/index.mjs
-        const setTarget = opponentPieces.filter(piece => {
-            if(piece.getType() === "empty" || piece.isDead()) return false;
-            const moves = piece.getMoves(board);
-            return moves.some(move => move.row === row && move.col === col);
+    move(target, board){
+        const { col: initCol } = this.getCellForBoard();
+        const { col: targetCol } = target.getCellForBoard();
+        const castling = Math.abs(initCol - targetCol) === 2;
+        if(!castling){
+            return super.move(target, board);
+        }
+        // special move: castling
+        const moves = this.getMoves(board);
+        const validMove = moves.find(move => {
+            const { row, col } = move;
+            const { row: targetRow, col: targetCol } = target.getCell();
+            return row === targetRow && col === targetCol;
         });
-        return setTarget;
+        if(!validMove){
+            return {
+                moved: false,
+                error: "Invalid move"
+            }
+        }
+        // move the king
+        if(initCol > targetCol){
+            // left castling
+            const leftRock = board.getPiece(this.row, 'a');
+            leftRock.move(board.getPiece(this.row, 'd'), board);
+        }else{
+            // right castling
+            const rightRock = board.getPiece(this.row, 'h');
+            const red = rightRock.move(board.getPiece(this.row, 'f'), board);
+            console.log("right castling" , rightRock, red)
+        }
+        // move the king
+        const { row, col } = target.getCell();
+        this.row = row;
+        this.col = col;
+        return {
+            moved: true,
+            error: null
+        }
     }
     castling(board){
         // special move: castling
@@ -180,12 +224,18 @@ export default class King extends Piece{
         // 3. the king is not in check
         // 4. the king will not be in check after castling
 
+
+        const response = {
+            right: false,
+            left: false
+        };
+
         // king has not moved
-        if(!this.firstMove) return false;
+        if(!this.firstMove) return response;
 
         // the king is not in check
         // if(this.isChecked(board)) return moves; error: infinite loop
-        // go arround this
+        // go arround this 
 
         // safe passage
         const safePassageCastling = (init, target) => {
@@ -205,21 +255,105 @@ export default class King extends Piece{
                 // backword check: from this position scan the board in all directions
                 // and check if there are any pieces that can attack this cell
                 // if there are then the king cannot castle
+                const attack = this._reverseCheck(board, piece);
                 if(piece.getType() !== "empty") return false;
+                if(attack) return false;
             }
             return true;
         };
         // the king cannot castle if there are pieces between the king and the rook
         const leftRock = board.getPiece(this.row, 'a');
-        const left = safePassageCastling(this, leftRock);
-        if(left){
-            return "yes to the left"
-        }
+        response.left = safePassageCastling(this, leftRock);
         const rightRock = board.getPiece(this.row, 'h');
-        const right = safePassageCastling(this, rightRock);
-        if(right){
-            return "yes to the right"
+        response.right = safePassageCastling(this, rightRock);
+        return response;
+    }
+    // internal methods
+    _safeCell(board, opponentPieces, row, col){
+        // return the attacker if the cell is not safe
+        // belongs to utils/index.mjs
+        const setTarget = opponentPieces.filter(piece => {
+            if(piece.getType() === "empty" || piece.isDead()) return false;
+            const moves = piece.getMoves(board);
+            return moves.some(move => move.row === row && move.col === col);
+        });
+        return setTarget;
+    }
+    _reverseCheck(board, piece){
+        const {color} = this.getCell();
+        const {row, col} = piece.getCellForBoard();
+        const isAllowed = (dirow, dicol, enemys) => {
+            for(let i = row + dirow, j = col + dicol; i >= 0 && i < 8 && j >= 0 && j < 8; i += dirow, j += dicol){
+                const target = board.getPiece(i, j);
+                const target_color = target.getColor();
+                const target_type = target.getType();
+                const hasEye = enemys.some(enemy => target_type === enemy);
+                if(target_color !== color && hasEye) return true;
+                if(target_type !== "empty") break;
+            }
+            return false;
         }
-        return "no";
+        const isPawnAttack = (dicol) => {
+            const dirow = color === "white" ? -1 : 1;
+            let i = row + dirow;
+            let j = col + dicol;
+            if(i < 0 || i >= 8 || j < 0 || j >= 8) return false;
+            const target = board.getPiece(i, j);
+            const target_color = target.getColor();
+            const target_type = target.getType();
+            if(target_color !== color && target_type === "pawn") return true;
+            return false;
+        }
+        const isKnightAttack = (row, col, color) => {
+            const dirow = [-2, -2, -1, -1, 1, 1, 2, 2];
+            const dicol = [-1, 1, -2, 2, -2, 2, -1, 1];
+            for(let i = 0; i < 8; i++){
+                const r = row + dirow[i];
+                const c = col + dicol[i];
+                if(r < 0 || r >= 8 || c < 0 || c >= 8) continue;
+                const target = board.getPiece(r, c);
+                const target_color = target.getColor();
+                const target_type = target.getType();
+                if(target_color !== color && target_type === "knight") return true;
+            }
+            return false;
+        }
+        const isKingAttack = (row, col, color) => {
+            const dirow = [-1, -1, -1, 0, 0, 1, 1, 1];
+            const dicol = [-1, 0, 1, -1, 1, -1, 0, 1];
+            for(let i = 0; i < 8; i++){
+                const r = row + dirow[i];
+                const c = col + dicol[i];
+                if(r < 0 || r >= 8 || c < 0 || c >= 8) continue;
+                const target = board.getPiece(r, c);
+                const target_color = target.getColor();
+                const target_type = target.getType();
+                if(target_color !== color && target_type === "king") return true;
+            }
+            return false;
+        }
+        // special case: pawn
+        if(isPawnAttack(1) || isPawnAttack(-1)) return true;
+        // special case: knight
+        if(isKnightAttack(row, col, color)) return true;
+        // special case: king
+        if(isKingAttack(row, col, color)) return true;
+        // horizontal top to bottom
+        if(isAllowed(-1, 0, ["queen", "rock"])) return true;
+        // horizontal bottom to top
+        if(isAllowed(1, 0, ["queen", "rock"])) return true;
+        // vertical left to right
+        if(isAllowed(0, 1, ["queen", "rock"])) return true;
+        // vertical right to left
+        if(isAllowed(0, -1, ["queen", "rock"])) return true;
+        // diagonal top left to bottom right
+        if(isAllowed(-1, 1, ["queen", "bishop"])) return true;
+        // diagonal top right to bottom left
+        if(isAllowed(-1, -1, ["queen", "bishop"])) return true;
+        // diagonal bottom left to top right
+        if(isAllowed(1, 1, ["queen", "bishop"])) return true;
+        // diagonal bottom right to top left
+        if(isAllowed(1, -1, ["queen", "bishop"])) return true;
+        return false;
     }
 }
