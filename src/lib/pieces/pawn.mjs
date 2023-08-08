@@ -54,51 +54,30 @@ export default class Pawn extends Piece{
             push(parseInt(this.row) - 1, digitToCol[colToDigit[this.col] - 1], true, "white");
             push(parseInt(this.row) - 1, digitToCol[colToDigit[this.col] + 1], true, "white");
         }
+
+        // special move: en passant
+        const lastMove = board.getLastMove();
+        if(lastMove){
+            const { row, col, color, type } = lastMove;
+            if(type !== "pawn") return path;
+            if(color === this.color) return path;
+            if(row !== this.row) return path;
+            if(colToDigit[col] === colToDigit[this.col] - 1 || colToDigit[col] === colToDigit[this.col] + 1){
+                if(color === "white"){
+                    path.push({
+                        row: 3,
+                        col: col,
+                        kill: { row, col }
+                    });
+                }else{
+                    path.push({
+                        row: 6,
+                        col: col,
+                        kill: { row, col }
+                    });
+                }
+            }
+        }
         return path;
     }
-    isBlocked(to, board){
-        // // in the case of a pawn we need to check if the move is blocked
-        // // by another piece
-        // // we do that by checking whether is there a piece in the possible moves
-        // // between the current cell and the destination cell
-        
-        // // hence the sorting of the moves by row
-        // const moves = this.getMoves()
-        //     .sort((a, b) => this.getPiece().color==="white" ? a.row - b.row : b.row - a.row);
-        // const { row, col } = to.getCell();
-        // if(!moves.some(move => move.row === row && move.col === col)){
-        //     // seams like the move is intended to capture a piece
-        //     // don't make any assumptions, let the validation handle it
-        //     // we have this anomoaly because the only piece that captures differently
-        //     // is the pawn (a better design wouldn't have these headaches)
-        //     return false;
-        // }
-        // console.log("create a path ?", moves, row, col);
-        // for(let i = 0; i < moves.length; i++){
-        //     const piece = board.getPiece(moves[i].row - 1, colToDigit[moves[i].col]);
-        //     if(piece.getPiece().type !== "ghost"){
-        //         return true;
-        //     }
-        //     if(moves[i].row === row && moves[i].col === col){
-        //         break;
-        //     }
-        // }
-        return false;
-    }
-    // getCell(){
-    //     throw Error("Cannot call abstract method");
-    // }
-    // setCell(){
-    //     throw Error("Cannot call abstract method");
-    // }
-    // getColor(){
-    //     throw Error("Cannot call abstract method");
-    // }
-    // getPiece(){
-    //     return {
-    //         type: "Pawn",
-    //         color: this.color,
-    //         selected: this.selected,
-    //     }
-    // }
 }

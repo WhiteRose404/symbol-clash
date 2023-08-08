@@ -20,10 +20,11 @@ export default class Board {
     }
 
     // constructors
-    constructor(whitePlayer, blackPlayer, turn = "white") {
+    constructor(whitePlayer, blackPlayer, turn = "white", lastMove = null) {
         this.whitePlayer = whitePlayer;
         this.blackPlayer = blackPlayer;
         this.turn = turn;
+        this.lastMove = lastMove;
     }
 
     // getters
@@ -52,7 +53,8 @@ export default class Board {
         return {
             white: whitePiecesCopy,
             black: blackPiecesCopy,
-            turn: this.turn
+            turn: this.turn,
+            lastMove: this.lastMove
         };
     }
     getBoard() {
@@ -79,6 +81,17 @@ export default class Board {
     }
     getTurn() {
         return this.turn;
+    }
+    getLastMove() {
+        return this.lastMove;
+    }
+
+    // setters
+    setTurn(turn) {
+        this.turn = turn;
+    }
+    setLastMove(lastMove) {
+        this.lastMove = lastMove;
     }
 
     // methods
@@ -126,6 +139,8 @@ export default class Board {
         const response = initialPiece.move(targetPiece, this);
         if(response.moved){
             initialPiece.firstMove = false;
+            // update the last move
+            this.setLastMove(initialPiece.getCell());
             this.turn = this.turn === "white" ? "black" : "white";
             // switched turn
             // check whether the king is dead

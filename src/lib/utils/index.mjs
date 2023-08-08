@@ -59,7 +59,7 @@ export const horizontal_diagonal = (row, col, dirow, dicol, moves, color, board)
 }
 
 export const createBoardFromSnapShot = (snapShot) => {
-    const { white, black, turn } = snapShot;
+    const { white, black, turn, lastMove } = snapShot;
     const pieces = (pieces) => {
         const arr = [];
         pieces.forEach(piece => {
@@ -91,6 +91,6 @@ export const createBoardFromSnapShot = (snapShot) => {
     }
     const whitePlayer = new WhitePlayer(pieces(white));
     const blackPlayer = new BlackPlayer(pieces(black));
-    const board = new Board(whitePlayer, blackPlayer, turn);
+    const board = new Board(whitePlayer, blackPlayer, turn, lastMove);
     return board;
 }
