@@ -61,7 +61,7 @@ export default class Pawn extends Piece{
             const { row, col, color, type } = lastMove;
             if(type !== "pawn") return path;
             if(color === this.color) return path;
-            if(row !== this.row) return path;
+            if(row !== this.row || (row !== 4 && color === "white") || (row !== 5 && color === "black")) return path;
             if(colToDigit[col] === colToDigit[this.col] - 1 || colToDigit[col] === colToDigit[this.col] + 1){
                 if(color === "white"){
                     path.push({

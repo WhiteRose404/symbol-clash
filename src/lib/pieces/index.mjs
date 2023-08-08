@@ -45,7 +45,7 @@ export default class Piece{
         const { row: targetRow, col: targetCol } = target.getCell();
         const moves = this.getMoves(board);
         const validMove = moves.find(move => move.row == targetRow && move.col == targetCol);
-        const late_kill = validMove.kill; // late kill is refered to en passant move
+        const late_kill = validMove?.kill; // late kill is refered to en passant move
         if(late_kill){
             const { row: targetKillerRow, col: targetKillerCol } = late_kill;
             const targetKiller = board.getPiece(targetKillerRow, targetKillerCol);
