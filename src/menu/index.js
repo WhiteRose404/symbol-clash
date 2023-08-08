@@ -66,6 +66,15 @@ options.addEventListener('click', (event) => {
     backButton.classList.remove('hidden');
 });
 
+// new game options
+const customGame = document.getElementById('custom-game');
+const vsComputer = document.getElementById('vs-computer');
+const vsRandom = document.getElementById('vs-random');
+const vsLocal = document.getElementById('vs-local');
 
-
+vsLocal.addEventListener('click', (event) => {
+    // if it is, we can show the new game form
+    // go to /board.html
+    window.location.href = '/board.html';
+});
 

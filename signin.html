@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="./media/pieces/chessboard.png">
+
+    <title>Symbol Clash</title>
+    <link rel="stylesheet" href="style/rest.css">
+    <link rel="stylesheet" href="style/index.css">
+    <link rel="stylesheet" href="style/log-form.css">
+</head>
+<body>
+    <main id="main-box">
+        <section id="main-title">
+            <h1>Symbol Clash</h1>
+        </section>
+        <section id="body">
+            <form id="main-form" class="user-form">
+                <div id="input-box">
+                    <input type="text" id="player-name" placeholder="user name">
+                    <input type="password" id="player-password" placeholder="password">
+                </div>
+                <div id="error-box"></div>
+                <div id="button-box">
+                    <button type="button" id="register">New Here</button>
+                    <button type="button" id="login">Login</button>
+                </div>
+            </form>
+            <form id="register-form" class="hidden user-form">
+                <div id="input-box">
+                    <input type="text" id="player-name" placeholder="user name">
+                    <input type="password" id="player-password" placeholder="password">
+                    <input type="password" id="retype-player-password" placeholder="retype password">
+                </div>
+                <div id="error-box"></div>
+                <div id="button-box">
+                    <button type="button" id="login">Already have an Account</button>
+                    <button type="button" id="register">Register</button>
+                </div>
+            </form>
+        </section>
+    </main>
+    <script src="src/index.js" defer></script>
+</body>
+</html>
