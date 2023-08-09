@@ -12,6 +12,10 @@ const cells = document.querySelectorAll('#game-board .cell');
 const timeInfo = document.querySelector('#info-box > #time');
 const generalInfo = document.querySelector('#info-box > #general');
 
+// button's
+const backButton = document.querySelector('#back');
+const resignButton = document.querySelector('#resign');
+
 // error box
 const error = document.querySelector('#error-box');
 
@@ -22,7 +26,19 @@ let board = new Board(whitePlayer, blackPlayer);
 const game_history = [board.getSnapShot()]; // to be refactored: should store metadata only which
                                             // will be used to create a new board
 
-let alreadySelected = false;
+
+
+// buttons listeners
+backButton.addEventListener('click', (e)=>{
+    e.preventDefault();
+    board = rollback();
+    updateBoard();
+});
+
+
+
+
+// let alreadySelected = false;
 let initialPosition = null;
 updateBoard();
 cells.forEach((cell) => {
@@ -57,12 +73,14 @@ cells.forEach((cell) => {
             }
             const response = board.move(initialPiece, targetPiece);
             game_history.push(board.getSnapShot());
+            // enable the back button
+            backButton.disabled = false;
             if(!response.moved){
                 // fix the check issue
                 // invalid move
-                if(response.check){
+                // if(response.check){
                     board = rollback();
-                }
+                // }
                 error.innerHTML = response.error;
                 error.classList.remove('hidden');
             }
@@ -93,12 +111,14 @@ function rollback(){
     // return the board to the previous state
     // and return the board
     console.log("activated rollback")
-    if(game_history.length === 1)
-        console.warn("You can't rollback anymore");
-    else if(game_history.length > 1)
+    if(game_history.length > 1)
         game_history.pop();
     else 
         new Error("Rollback error");
+    if(game_history.length === 1){
+        // disable the back button
+        backButton.disabled = true;
+    }
     console.log("game_history", game_history);
     const new_board = createBoardFromSnapShot(game_history[game_history.length - 1]);
     return new_board;

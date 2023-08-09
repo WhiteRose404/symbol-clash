@@ -4,13 +4,69 @@
     gap: 0.2rem;
 }
 
+#body {
+    display: flex;
+    gap: 1.2rem;
+}
+
+
+#body .side-box{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background-color: var(--main-bg);
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+#body .side-box #button-box{
+    display: flex;
+    gap: 0.75rem;
+}
+#body .side-box #button-box button{
+    width: 100%;
+    padding: 0.7rem;
+    border-radius: 5px;
+    border: 1px solid var(--main-color);
+    outline: none;
+    background-color: var(--main-color);
+    color: var(--main-bg);
+    font-weight: bold;
+    cursor: pointer;
+}
+#body .side-box #button-box button~button {
+    background-color: transparent;
+    color: var(--main-color)
+}
+#body .side-box #button-box > button:hover {
+    background-color: var(--main-bg);
+    color: var(--main-color);
+    opacity: 1;
+}
+#body .side-box #button-box > button:active {
+    background-color: var(--main-bg);
+    color: var(--main-color);
+    opacity: 1;
+}
+#body .side-box #button-box > button:disabled {
+    background-color: var(--main-bg);
+    color: var(--main-color);
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+#body .side-box #button-box > button:disabled:active {
+    background-color: var(--main-bg);
+    color: var(--main-color);
+    opacity: 1;
+}
 #game-board{
     position: relative;
     display: grid;
     grid-template-columns: repeat(8, 100px);
     grid-template-rows: repeat(8, 100px);
     gap: 1px;
-    width: 100%;
+    /* width: 100%; */
     height: 100%;
     margin: 0 auto;
     padding: 0;
@@ -27,7 +83,14 @@
     cursor: pointer;
     font-family: 'Courier New', Courier, monospace;
 }
-@media screen and ((width < 1024px) and (height < 1024px)){
+
+@media screen and ((width < 1024px) or (height < 1024px)){
+    #body{
+        flex-direction: column;
+    }
+}
+    
+@media screen and ((width < 1024px) or (height < 1024px)){
     #game-board{
         grid-template-columns: repeat(8, 80px);
         grid-template-rows: repeat(8, 80px);
