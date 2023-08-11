@@ -53,6 +53,8 @@ playAgainButton.addEventListener('click', (e)=>{
     gameBoard.classList.remove('hidden');
     // hide the winner box
     document.querySelector('#winner').classList.add('hidden');
+    document.querySelector(`#winner .white-player`).classList.add('hidden');
+    document.querySelector(`#winner .black-player`).classList.add('hidden');
     // hide the second set of buttons
     document.querySelector('#second-set').classList.add('hidden');
 
