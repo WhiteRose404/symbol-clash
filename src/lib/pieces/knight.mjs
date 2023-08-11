@@ -42,25 +42,4 @@ export default class Knight extends Piece{
         if(row + 1 < 8 && col - 2 >= 0) push(row + 1, col - 2);
         return moves;
     }
-    isBlocked(){
-        // the night can be never blocked // unless it is in the edge of the board or the king is in check
-        // which will be handled later
-        return false;
-    }
-    // getCell(){
-    //     throw Error("Cannot call abstract method");
-    // }
-    // setCell(){
-    //     throw Error("Cannot call abstract method");
-    // }
-    // getColor(){
-    //     throw Error("Cannot call abstract method");
-    // }
-    // getPiece(){
-    //     return {
-    //         type: "Knight",
-    //         color: this.color,
-    //         selected: this.selected,
-    //     }
-    // }
 }

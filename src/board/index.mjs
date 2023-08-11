@@ -6,6 +6,7 @@ import Board from "../lib/board/index.mjs";
 import { createBoardFromSnapShot, mapping, to1DArray } from "../lib/utils/index.mjs";
 
 // game board
+const gameBoard = document.querySelector('#game-board');
 const cells = document.querySelectorAll('#game-board .cell');
 
 // info box
@@ -15,6 +16,10 @@ const generalInfo = document.querySelector('#info-box > #general');
 // button's
 const backButton = document.querySelector('#back');
 const resignButton = document.querySelector('#resign');
+const menuButton = document.querySelector('#menu');
+const playAgainButton = document.querySelector('#again');
+const newGameButton = document.querySelector('#new-game');
+const continueButton = document.querySelector('#continue');
 
 // error box
 const error = document.querySelector('#error-box');
@@ -23,6 +28,7 @@ const error = document.querySelector('#error-box');
 const whitePlayer = new WhitePlayer();
 const blackPlayer = new BlackPlayer();
 let board = new Board(whitePlayer, blackPlayer);
+let gameEnded = false;
 const game_history = [board.getSnapShot()]; // to be refactored: should store metadata only which
                                             // will be used to create a new board
 
@@ -35,6 +41,91 @@ backButton.addEventListener('click', (e)=>{
     updateBoard();
 });
 
+menuButton.addEventListener('click', (e)=>{
+    e.preventDefault();
+    window.location.href = "/";
+});
+
+playAgainButton.addEventListener('click', (e)=>{
+    e.preventDefault();
+
+    // show the board
+    gameBoard.classList.remove('hidden');
+    // hide the winner box
+    document.querySelector('#winner').classList.add('hidden');
+    // hide the second set of buttons
+    document.querySelector('#second-set').classList.add('hidden');
+
+
+    // show the third set of buttons
+    if(!gameEnded && game_history.length > 1){
+        document.querySelector('#third-set').classList.remove('hidden');
+        return;
+    }
+    // new game
+    const whitePlayer = new WhitePlayer();
+    const blackPlayer = new BlackPlayer();
+    board = new Board(whitePlayer, blackPlayer);
+    gameEnded = false;
+    // console.log(game_history.length);
+    while(game_history.length > 0) game_history.pop(); // delete the history
+    game_history.push(board.getSnapShot());
+    backButton.disabled = true;
+    updateBoard();
+    // show the first set of buttons
+    document.querySelector('#first-set').classList.remove('hidden');
+    // reset the board
+    
+});
+
+continueButton.addEventListener('click', (e)=>{
+    e.preventDefault();
+    // hide the winner box
+    document.querySelector('#winner').classList.add('hidden');
+    // hide the second set of buttons
+    document.querySelector('#second-set').classList.add('hidden');
+    // hide the third set of buttons
+    document.querySelector('#third-set').classList.add('hidden');
+    // show the first set of buttons
+    document.querySelector('#first-set').classList.remove('hidden');
+});
+
+newGameButton.addEventListener('click', (e)=>{
+    e.preventDefault();
+    const whitePlayer = new WhitePlayer();
+    const blackPlayer = new BlackPlayer();
+    board = new Board(whitePlayer, blackPlayer);
+    gameEnded = false;
+    // console.log(game_history.length);
+    while(game_history.length > 0) game_history.pop(); // delete the history
+    game_history.push(board.getSnapShot());
+    backButton.disabled = true;
+    updateBoard();
+    
+    // hide the winner box
+    document.querySelector('#winner').classList.add('hidden');
+    // hide the second set of buttons
+    document.querySelector('#second-set').classList.add('hidden');
+    // hide the third set of buttons
+    document.querySelector('#third-set').classList.add('hidden');
+    // show the first set of buttons
+    document.querySelector('#first-set').classList.remove('hidden');
+});
+
+resignButton.addEventListener('click', (e)=>{
+    e.preventDefault();
+    // hide the board
+    gameBoard.classList.add('hidden');
+    // hide the first set of buttons
+    document.querySelector('#first-set').classList.add('hidden');
+    // hide the board
+    document.querySelector('#game-board').classList.add('hidden');
+    // show the winner box
+    document.querySelector('#winner').classList.remove('hidden');
+    document.querySelector(`#winner .${board.getTurn()}-player`).classList.remove('hidden');
+    // show the second set of buttons
+    document.querySelector('#second-set').classList.remove('hidden');
+});
 
 
 
@@ -94,6 +185,7 @@ cells.forEach((cell) => {
 
                 // remove the event listener
                 removeListeners();
+                gameEnded = true;
                 console.log("checkmate");
                 console.log("game_history", game_history);
             }

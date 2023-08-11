@@ -102,6 +102,11 @@
                 <!-- chess pieces -->
                 
             </div>
+            <div class="hidden" id="winner">
+                <p>
+                    <span class="black-player hidden">Black</span> <span class="white-player hidden">White</span> has resigned from the game!
+                </p>
+            </div>
             <div class="side-box">
                 <div id="error-box">( ^ - ^ )</div>
                 <div id="info-box">
@@ -117,9 +122,17 @@
                     </div>
                     <div id="general"></div>
                 </div>
-                <div id="button-box">
+                <div class="button-box" id="first-set">
                     <button type="button" id="back" disabled>Back</button>
                     <button type="button" id="resign">Resign</button>
+                </div>
+                <div class="button-box hidden" id="second-set">
+                    <button type="button" id="menu">Menu</button>
+                    <button type="button" id="again">Play Again</button>
+                </div>
+                <div class="button-box hidden" id="third-set">
+                    <button type="button" id="continue">Continue</button>
+                    <button type="button" id="new-game">New Game</button>
                 </div>
             </div>
         </section>

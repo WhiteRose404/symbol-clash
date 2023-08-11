@@ -9,6 +9,27 @@
     gap: 1.2rem;
 }
 
+#body #winner{
+    padding: 1.5rem;
+    text-align: center;
+}
+
+#body #winner > p > span{
+    padding: 0.5rem;
+    font-weight: bold   ;
+    border-radius: 5px;
+    text-align: center;
+}
+
+#body #winner .black-player{
+    background-color: #000;
+    color: #fff;
+}
+
+#body #winner .white-player{
+    background-color: #fff;
+    color: #000;
+}
 
 #body .side-box{
     display: flex;
@@ -20,11 +41,11 @@
     text-align: center;
 }
 
-#body .side-box #button-box{
+#body .side-box .button-box{
     display: flex;
     gap: 0.75rem;
 }
-#body .side-box #button-box button{
+#body .side-box .button-box button{
     width: 100%;
     padding: 0.7rem;
     border-radius: 5px;
@@ -35,27 +56,27 @@
     font-weight: bold;
     cursor: pointer;
 }
-#body .side-box #button-box button~button {
+#body .side-box .button-box button~button {
     background-color: transparent;
     color: var(--main-color)
 }
-#body .side-box #button-box > button:hover {
+#body .side-box .button-box > button:hover {
     background-color: var(--main-bg);
     color: var(--main-color);
     opacity: 1;
 }
-#body .side-box #button-box > button:active {
+#body .side-box .button-box > button:active {
     background-color: var(--main-bg);
     color: var(--main-color);
     opacity: 1;
 }
-#body .side-box #button-box > button:disabled {
+#body .side-box .button-box > button:disabled {
     background-color: var(--main-bg);
     color: var(--main-color);
     opacity: 0.5;
     cursor: not-allowed;
 }
-#body .side-box #button-box > button:disabled:active {
+#body .side-box .button-box > button:disabled:active {
     background-color: var(--main-bg);
     color: var(--main-color);
     opacity: 1;
